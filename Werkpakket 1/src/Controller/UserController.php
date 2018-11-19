@@ -52,7 +52,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}/remove", methods={"GET"}, name="removeUser")
+     * @Route("/users/{id}", methods={"DELETE"}, name="removeUser")
      */
     public function removeUser($id)
     {
@@ -70,7 +70,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}/edit", methods={"GET"}, name="editUserRole")
+     * @Route("/users/{id}", methods={"PUT"}, name="editUserRole")
      */
     public function editUserRole($id)
     {
