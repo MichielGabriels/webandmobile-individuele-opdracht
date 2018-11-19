@@ -67,10 +67,14 @@ const styles = theme => ({
       },
     },
   },
+  usersButton: {
+    marginLeft: '5px'
+  }
 });
 
 function NavigationBar (props) {
   const { classes } = props;
+
   return (
     <div className={classes.root}>
       <AppBar position="static">

@@ -14,7 +14,8 @@ class Welcome extends Component {
 
         this.state = {
             name: '',
-            navigate: false
+            navigate: false,
+            navigateUsers: false
         };
     }
 
@@ -28,11 +29,17 @@ class Welcome extends Component {
         this.setState({ navigate: true });
     }
 
+    onClickUsers = () => {
+        // TODO: Check if user is admin and password is correct
+        this.setState({ navigateUsers: true })
+    }
+
     render() {
         return (
-            this.state.navigate ? <Redirect to="/messageList" /> :
+            this.state.navigateUsers ? <Redirect to="/users" /> :
+                this.state.navigate ? <Redirect to="/messageList" /> :
                 <div>
-                    <NavigationBar displaySearchFields={'none'} />
+                    <NavigationBar displaySearchFields={'none'}/>
                     <Fragment>
                         <Typography variant="title">
                             Welcome!
@@ -55,9 +62,19 @@ class Welcome extends Component {
                                 onClick={this.onClickLogin}
                                 disabled={!this.state.name}>
                                 Enter
-                        </Button>
+                            </Button>
                         </div>
-                        <Button
+                        <div className="col s3">
+                            <Button 
+                                variant="contained"
+                                size="small"
+                                color="primary"
+                                onClick={this.onClickUsers}
+                                disabled={!this.state.name}>
+                                Registered Users
+                            </Button>
+                        </div>
+                        <Button 
                             variant="contained"
                             size="small"
                             color="primary"
