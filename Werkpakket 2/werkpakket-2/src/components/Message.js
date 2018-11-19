@@ -33,7 +33,7 @@ const Message = (props) => {
                         <AddReaction
                             onReactionTextfieldChanged={(e) => props.onReactionTextfieldChanged(e, props.messageModel.id)}
                             reactionModelToAdd={props.reactionModelToAdd}
-                            reactToComment={props.reactToComment}>
+                            reactToComment={props.reactToComment} formId={props.messageModel.id}>
                         </AddReaction>
                     </ReactionText>
 
@@ -51,7 +51,7 @@ const Message = (props) => {
     );
 }
 
-Message.PropTypes = {
+Message.propTypes = {
     id: PropTypes.number.isRequired,
     content: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
@@ -59,11 +59,9 @@ Message.PropTypes = {
     downvotes: PropTypes.number,
     onClickDownvote: PropTypes.func.isRequired,
     onClickUpvote: PropTypes.func.isRequired,
-    messageId: PropTypes.number.isRequired,
-    reactionContent: PropTypes.string.isRequired,
     reactToComment: PropTypes.func.isRequired,
     onReactionTextfieldChanged: PropTypes.func.isRequired,
-    reactionModelToAdd: PropTypes.array.isRequired
+    reactionModelToAdd: PropTypes.object.isRequired
 }
 
 export default Message;

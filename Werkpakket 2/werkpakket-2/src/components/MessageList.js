@@ -69,14 +69,15 @@ class MessageList extends Component {
         this.setState({ reactionModelToAdd: modelToUpdate });
     }
 
-    reactToComment = () => {
+    reactToComment = (e, formId) => {
+        e.preventDefault();
+        document.getElementById("form" + formId).reset();
         if (this.state.reactionModelToAdd.content.trim()) {
             axios.post('http://localhost:8000/reaction/' + this.state.reactionModelToAdd.messageId + '/' + this.state.reactionModelToAdd.content)
                 .then(response => {
                     const updatedReactions = Array.from(response.data);
                     this.setState({ reactions: updatedReactions });
                 });
-
         }
         this.setState({
             reactionModelToAdd: {
@@ -181,7 +182,7 @@ class MessageList extends Component {
     renderMessages() {
         return this.state.messages.map(message =>
             (
-                <Message key={message.id} data-key={message.id} reactions={this.state.reactions} reactToComment={this.reactToComment} reactionModelToAdd={this.state.reactionModelToAdd} onReactionTextfieldChanged={this.onReactionTextfieldChanged} messageModel={message} onClickDownvote={this.onClickDownvote} onClickUpvote={this.onClickUpvote}></Message>
+                <Message key={message.id} reactions={this.state.reactions} reactToComment={this.reactToComment} reactionModelToAdd={this.state.reactionModelToAdd} onReactionTextfieldChanged={this.onReactionTextfieldChanged} messageModel={message} onClickDownvote={this.onClickDownvote} onClickUpvote={this.onClickUpvote}></Message>
             ),
         )
     }
