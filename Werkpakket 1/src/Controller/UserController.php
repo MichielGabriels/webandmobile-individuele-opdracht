@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+header("Access-Control-Allow-Origin: *");
+
 use App\Model\UserModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,7 +54,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}", methods={"DELETE"}, name="removeUser")
+     * @Route("/users/{id}", methods={"GET"}, name="removeUser")
      */
     public function removeUser($id)
     {
@@ -70,7 +72,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}", methods={"PUT"}, name="editUserRole")
+     * @Route("/users/{id}", methods={"POST"}, name="editUserRole")
      */
     public function editUserRole($id)
     {

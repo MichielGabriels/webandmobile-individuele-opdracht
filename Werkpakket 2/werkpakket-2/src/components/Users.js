@@ -4,7 +4,7 @@ import { DataTable, TableHeader } from 'react-mdl';
 const Users = ({ users }) => {
 
     return (
-        <div style={{ width: '50%', margin: 'auto', marginTop: '5%' }} align="center">
+        <div style={{ display: 'inline-block', margin: 'auto', marginTop: '20px' }}>
             <DataTable
                 shadow={0}
                 rows={users}
