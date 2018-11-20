@@ -76,12 +76,16 @@ class MessageList extends Component {
     reactToComment = (e, formId) => {
         e.preventDefault();
         document.getElementById("form" + formId).reset();
-        if (this.state.reactionModelToAdd.content.trim()) {
-            axios.post('http://localhost:8000/reaction/' + this.state.reactionModelToAdd.messageId + '/' + this.state.reactionModelToAdd.content)
-                .then(response => {
-                    const updatedReactions = Array.from(response.data);
-                    this.setState({ reactions: updatedReactions });
-                });
+        if (this.props.username !== 'Anonymous') {
+            if (this.state.reactionModelToAdd.content.trim()) {
+                axios.post('http://localhost:8000/reaction/' + this.state.reactionModelToAdd.messageId + '/' + this.state.reactionModelToAdd.content)
+                    .then(response => {
+                        const updatedReactions = Array.from(response.data);
+                        this.setState({ reactions: updatedReactions });
+                    });
+            }
+        } else {
+            alert('Anonymous users cannot place a reaction.');
         }
         this.setState({
             reactionModelToAdd: {
