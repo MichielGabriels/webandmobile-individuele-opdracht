@@ -7,6 +7,10 @@ export default function userInfoReducer(state = initialState.userInfo, action) {
             return Object.assign({}, state, { name: action.body });
         }
 
+        case types.LOGGED_IN_WITH_ROLE_ADMINISTRATOR: {
+            return Object.assign({}, state, { role: action.body })
+        }
+
         default:
             return state;
     }

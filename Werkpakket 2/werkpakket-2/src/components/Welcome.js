@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { storeUserName } from "../actions/userInfoActions";
+import { storeUserName, storeUserRole } from "../actions/userInfoActions";
 import NavigationBar from './NavigationBar.js';
 import axios from 'axios';
 
@@ -46,6 +46,7 @@ class Welcome extends Component {
                 .then(response => {
                     const role = response.data.role;
                     if (role === 'Administrator') {
+                        this.props.storeUserRole(role);
                         this.setState({ navigateUsers: true });
                     } else {
                         alert('You are not allowed to view this page.');
@@ -128,7 +129,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, ownProps) {
     return {
-        storeUserName: bindActionCreators(storeUserName, dispatch)
+        storeUserName: bindActionCreators(storeUserName, dispatch),
+        storeUserRole: bindActionCreators(storeUserRole, dispatch)
     };
 }
 

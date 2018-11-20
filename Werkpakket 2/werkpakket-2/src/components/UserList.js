@@ -3,20 +3,26 @@ import Users from './Users';
 import axios from 'axios';
 import Select from 'react-select';
 import { Button } from 'react-mdl';
+import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom';
 
 class UserList extends Component {
 
-    state = {
-        users: [],
-        userIds: [],
-        selectedRemoveUserOption: null,
-        selectedEditUserRoleOption: null,
-        selectedRoleOption: null,
-        possibleUserRoles: [
-            { value: 'Administrator', label: 'Administrator' },
-            { value: 'Moderator', label: 'Moderator' },
-            { value: 'User', label: 'User' }
-        ]
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            users: [],
+            userIds: [],
+            selectedRemoveUserOption: null,
+            selectedEditUserRoleOption: null,
+            selectedRoleOption: null,
+            possibleUserRoles: [
+                { value: 'Administrator', label: 'Administrator' },
+                { value: 'Moderator', label: 'Moderator' },
+                { value: 'User', label: 'User' }
+            ]
+        }
     }
 
     componentWillMount() {
@@ -77,31 +83,43 @@ class UserList extends Component {
                         selectedRoleOption: null
                     })
                 });
-        }  
+        }
     }
 
     render() {
         return (
-            <div className="UserList" align="center" style={{ marginTop: '100px' }}>
-                <div style={{ marginTop: '10px', width: '10%' }}>
-                    <form onSubmit={this.handleRemoveUser}>
-                        <Select value={this.state.selectedRemoveUserOption} onChange={this.handleRemoveUserSelectChange} options={this.state.userIds} />
-                        <Button raised ripple style={{ marginTop: '5px' }}>Remove User</Button>
-                    </form>
-                </div>
+            this.props.role ?
+                <div className="UserList" align="center" style={{ marginTop: '100px' }}>
+                    <div style={{ marginTop: '10px', width: '10%' }}>
+                        <form onSubmit={this.handleRemoveUser}>
+                            <Select value={this.state.selectedRemoveUserOption} onChange={this.handleRemoveUserSelectChange} options={this.state.userIds} />
+                            <Button raised ripple style={{ marginTop: '5px' }}>Remove User</Button>
+                        </form>
+                    </div>
 
-                <Users users={this.state.users} />
+                    <Users users={this.state.users} />
 
-                <div style={{ marginTop: '10px', width: '10%' }}>
-                    <form onSubmit={this.handleEditUserRole}>
-                        <Select value={this.state.selectedEditUserRoleOption} onChange={this.handleEditUserRoleSelectChange} options={this.state.userIds} />
-                        <Select value={this.state.selectedRoleOption} onChange={this.handleRoleSelectChange} options={this.state.possibleUserRoles} />
-                        <Button raised ripple style={{ marginTop: '5px' }}>Edit User</Button>
-                    </form>
+                    <div style={{ marginTop: '10px', width: '10%' }}>
+                        <form onSubmit={this.handleEditUserRole}>
+                            <Select value={this.state.selectedEditUserRoleOption} onChange={this.handleEditUserRoleSelectChange} options={this.state.userIds} />
+                            <Select value={this.state.selectedRoleOption} onChange={this.handleRoleSelectChange} options={this.state.possibleUserRoles} />
+                            <Button raised ripple style={{ marginTop: '5px' }}>Edit User</Button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            : <Redirect to="/" />
         );
     }
 }
 
-export default UserList;
+function mapStateToProps(state) {
+    return {
+        role: state.userInfo.role
+    };
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+    return {};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);
