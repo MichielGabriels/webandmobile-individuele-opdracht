@@ -90,19 +90,25 @@ class UserList extends Component {
         return (
             this.props.role ?
                 <div className="UserList" align="center" style={{ marginTop: '100px' }}>
-                    <div style={{ marginTop: '10px', width: '10%' }}>
+                    <div style={{ marginTop: '10px', width: '50%', maxWidth: '156px' }}>
                         <form onSubmit={this.handleRemoveUser}>
-                            <Select value={this.state.selectedRemoveUserOption} onChange={this.handleRemoveUserSelectChange} options={this.state.userIds} />
+                            <div style={{ width: '90%' }} align="left">
+                                <Select value={this.state.selectedRemoveUserOption} onChange={this.handleRemoveUserSelectChange} options={this.state.userIds} />
+                            </div>
                             <Button raised ripple style={{ marginTop: '5px' }}>Remove User</Button>
                         </form>
                     </div>
 
                     <Users users={this.state.users} />
 
-                    <div style={{ marginTop: '10px', width: '10%' }}>
+                    <div style={{ marginTop: '20px', width: '50%', maxWidth: '156px' }}>
                         <form onSubmit={this.handleEditUserRole}>
-                            <Select value={this.state.selectedEditUserRoleOption} onChange={this.handleEditUserRoleSelectChange} options={this.state.userIds} />
-                            <Select value={this.state.selectedRoleOption} onChange={this.handleRoleSelectChange} options={this.state.possibleUserRoles} />
+                            <div style={{ width: '90%' }} align="left">
+                                <Select value={this.state.selectedEditUserRoleOption} onChange={this.handleEditUserRoleSelectChange} options={this.state.userIds} />
+                            </div>
+                            <div style={{ marginTop: '5px', width: '90%' }} align="left">
+                                <Select value={this.state.selectedRoleOption} onChange={this.handleRoleSelectChange} options={this.state.possibleUserRoles} />
+                            </div>
                             <Button raised ripple style={{ marginTop: '5px' }}>Edit User</Button>
                         </form>
                     </div>
