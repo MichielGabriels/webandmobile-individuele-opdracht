@@ -32,8 +32,7 @@ class UserList extends Component {
                         userIds: this.state.userIds.concat({ value: user.id, label: user.id })
                     });
                 });
-            }
-        );
+            });
     }
 
     handleRemoveUserSelectChange = (selectedRemoveUserOption) => {
@@ -51,8 +50,7 @@ class UserList extends Component {
                     this.setState({
                         selectedRemoveUserOption: null
                     });
-                }
-            );
+                });
         }
     }
 
@@ -78,8 +76,7 @@ class UserList extends Component {
                         selectedEditUserRoleOption: null,
                         selectedRoleOption: null
                     })
-                }
-            );
+                });
         }  
     }
 

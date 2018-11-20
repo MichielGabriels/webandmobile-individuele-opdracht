@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { storeUserName } from "../actions/userInfoActions";
 import NavigationBar from './NavigationBar.js';
+import axios from 'axios';
 
 class Welcome extends Component {
     constructor(props) {
@@ -14,14 +15,23 @@ class Welcome extends Component {
 
         this.state = {
             name: '',
+            password: '',
             navigate: false,
             navigateUsers: false
         };
     }
 
     onClickLogin = () => {
-        this.props.storeUserName(this.state.name);
-        this.setState({ navigate: true });
+        if (this.state.name !== '' && this.state.password !== '') {
+            axios.get('http://localhost:8000/user/login?username=' + this.state.name + '&password=' + this.state.password)
+                .then(response => {
+                    this.props.storeUserName(this.state.name);
+                    this.setState({ navigate: true });
+                })
+                .catch(error => {
+                    alert("Invalid credentials");
+                });
+        }
     }
 
     onClickAnonymous = () => {
@@ -30,8 +40,21 @@ class Welcome extends Component {
     }
 
     onClickUsers = () => {
-        // TODO: Check if user is admin and password is correct
-        this.setState({ navigateUsers: true })
+        //this.setState({ navigateUsers: true })
+        if (this.state.name !== '' && this.state.password !== '') {
+            axios.get('http://localhost:8000/user/login?username=' + this.state.name + '&password=' + this.state.password)
+                .then(response => {
+                    const role = response.data.role;
+                    if (role === 'Administrator') {
+                        this.setState({ navigateUsers: true });
+                    } else {
+                        alert('You are not allowed to view this page.');
+                    }
+                })
+                .catch(error => {
+                    alert('Invalid credentials.');
+                });
+        }
     }
 
     render() {
@@ -54,13 +77,23 @@ class Welcome extends Component {
                             />
                         </div>
                         <div className="col s3">
+                            <TextField
+                                id="password"
+                                name="password"
+                                type="password"
+                                placeholder="Enter your password"
+                                value={this.state.password}
+                                onChange={(e) => this.setState({ password: e.target.value })}
+                            />
+                        </div>
+                        <div className="col s3">
                             <Button
                                 variant="contained"
                                 size="small"
                                 color="primary"
                                 id="confirmName"
                                 onClick={this.onClickLogin}
-                                disabled={!this.state.name}>
+                                disabled={!(this.state.name.length > 0 && this.state.password.length > 0)}>
                                 Enter
                             </Button>
                         </div>
@@ -70,7 +103,7 @@ class Welcome extends Component {
                                 size="small"
                                 color="primary"
                                 onClick={this.onClickUsers}
-                                disabled={!this.state.name}>
+                                disabled={!(this.state.name.length > 0 && this.state.password.length > 0)}>
                                 Registered Users
                             </Button>
                         </div>
@@ -79,6 +112,7 @@ class Welcome extends Component {
                             size="small"
                             color="primary"
                             id="denyLogin"
+                            disabled={this.state.name.length > 0 && this.state.password.length > 0}
                             onClick={this.onClickAnonymous}>
                             Proceed anonymously
                         </Button>

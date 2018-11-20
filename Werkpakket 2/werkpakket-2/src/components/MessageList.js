@@ -4,6 +4,8 @@ import Message from './Message';
 import axios from 'axios';
 import NavigationBar from './NavigationBar.js';
 import { ProgressBar } from 'react-mdl';
+import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom';
 
 class MessageList extends Component {
     constructor(props) {
@@ -22,19 +24,21 @@ class MessageList extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            messagesLoading: true
-        })
-        axios.get('http://localhost:8000/messages')
-            .then(response => {
-                const messages = response.data;
-                this.setState({ messages });
-            });
-        axios.get('http://localhost:8000/reactions')
-            .then(response => {
-                const reactions = response.data;
-                this.setState({ reactions, messagesLoading: false });
-            });
+        if (this.props.username) {
+            this.setState({
+                messagesLoading: true
+            })
+            axios.get('http://localhost:8000/messages')
+                .then(response => {
+                    const messages = response.data;
+                    this.setState({ messages });
+                });
+            axios.get('http://localhost:8000/reactions')
+                .then(response => {
+                    const reactions = response.data;
+                    this.setState({ reactions, messagesLoading: false });
+                });
+        }
     }
 
     onClickUpvote = (id) => {
@@ -189,23 +193,35 @@ class MessageList extends Component {
 
     render() {
         return (
-            <div>
-                <NavigationBar
-                    onSearchSubmit={this.onSearchSubmit}
-                />
-                {this.state.messagesLoading ?
-                    <div style={{
-                        width: '100%'
-                    }}>
-                        <ProgressBar indeterminate style={{ width: '100%', height: '5px' }} />
-                    </div>
-                    : null
-                }
+            this.props.username ?
+                <div>
+                    <NavigationBar
+                        onSearchSubmit={this.onSearchSubmit}
+                    />
+                    {this.state.messagesLoading ?
+                        <div style={{
+                            width: '100%'
+                        }}>
+                            <ProgressBar indeterminate style={{ width: '100%', height: '5px' }} />
+                        </div>
+                        : null
+                    }
 
-                {this.renderMessages()}
-            </div>
+                    {this.renderMessages()}
+                </div>
+            : <Redirect to="/" />
         );
     }
 }
 
-export default MessageList;
+function mapStateToProps(state) {
+    return {
+        username: state.userInfo.name
+    };
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+    return {};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageList);

@@ -100,6 +100,43 @@ class UserController extends AbstractController
         return new JsonResponse($sanitizedUser, $statusCode);
     }
 
+    /**
+     * @Route("/user/login", methods={"GET"}, name="loginUser")
+     */
+    public function login()
+    {
+        $statusCode = 200;
+
+        $username = $this->getLoginUsername();
+        if ($username == null) {
+            return new JsonResponse(null, 400);
+        }
+
+        $password = $this->getLoginPassword();
+        if ($password == null) {
+            return new JsonResponse(null, 400);
+        }
+
+        $loggedInUser = null;
+        try {
+            $loggedInUser = $this->userModel->loginUser($username, $password);
+            if ($loggedInUser == null) {
+                $statusCode = 404; // logged in user not found
+            }
+        } catch (\InvalidArgumentException $exception) {
+            $statusCode = 404; // user with 'username' not found
+        } catch (\Exception $exception) {
+            $statusCode = 500;
+        }
+
+        $sanitizedLoggedInUser = null;
+        if ($loggedInUser != null) {
+            $sanitizedLoggedInUser = $this->sanitize($loggedInUser);
+        }
+
+        return new JsonResponse($sanitizedLoggedInUser, $statusCode);
+    }
+
     private function getItemsPerPage()
     {
         $itemsPerPage = null;
@@ -156,6 +193,26 @@ class UserController extends AbstractController
         }
 
         return $newRole;
+    }
+
+    private function getLoginUsername()
+    {
+        $username = null;
+        if (isset($_GET['username'])) {
+            $username = $_GET['username'];
+        }
+
+        return $username;
+    }
+
+    private function getLoginPassword()
+    {
+        $password = null;
+        if (isset($_GET['password'])) {
+            $password = $_GET['password'];
+        }
+
+        return $password;
     }
 
     private function sanitize($data)

@@ -71,4 +71,35 @@ class PDOUserModel implements UserModel
 
         return $this->getUser($id);
     }
+
+    function loginUser($username, $password)
+    {
+        $pdo = $this->connection->getPDO();
+
+        $statement = $pdo->prepare('SELECT password FROM Users WHERE username = :username');
+        $statement->bindParam(':username', $username, \PDO::PARAM_STR);
+
+        $statement->execute();
+
+        $hashedPassword = $statement->fetch($pdo::FETCH_ASSOC);
+        if ($hashedPassword == 0) {
+            throw new \InvalidArgumentException();
+        }
+
+        if (!password_verify($password, $hashedPassword['password'])) {
+            throw new \InvalidArgumentException();
+        }
+
+        $statement = $pdo->prepare('SELECT id, username, role FROM Users WHERE username = :username');
+        $statement->bindParam(':username', $username, \PDO::PARAM_STR);
+
+        $statement->execute();
+
+        $user = $statement->fetch($pdo::FETCH_ASSOC);
+        if ($user == 0) {
+            throw new \InvalidArgumentException();
+        }
+
+        return $user;
+    }
 }
