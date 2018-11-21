@@ -190,7 +190,7 @@ class MessageList extends Component {
     renderMessages() {
         return this.state.messages.map(message =>
             (
-                <Message key={message.id} reactions={this.state.reactions} reactToComment={this.reactToComment} reactionModelToAdd={this.state.reactionModelToAdd} onReactionTextfieldChanged={this.onReactionTextfieldChanged} messageModel={message} onClickDownvote={this.onClickDownvote} onClickUpvote={this.onClickUpvote}></Message>
+                <Message key={message.id} reactions={this.state.reactions} reactToComment={this.reactToComment} reactionModelToAdd={this.state.reactionModelToAdd} onReactionTextfieldChanged={this.onReactionTextfieldChanged} messageModel={message} onClickDownvote={this.onClickDownvote} onClickUpvote={this.onClickUpvote}/>
             ),
         )
     }

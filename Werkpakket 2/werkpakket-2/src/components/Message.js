@@ -22,7 +22,7 @@ const Message = (props) => {
                             {props.reactions.filter(r => parseInt(r.messageId) === parseInt(props.messageModel.id)).map(reactionModel =>
                                 <List>
                                     <ListItem threeLine style={{ background: "#FFFFFF", boxShadow: '0.5px 0.5px 0.5px 0.5px lightgrey', padding: '5px' }}>
-                                        <ListItemContent avatar="person"></ListItemContent>
+                                        <ListItemContent avatar="person"/>
                                         <CardText style={{ textAlign: 'left' }}>
                                             {reactionModel.content}
                                         </CardText>
@@ -52,9 +52,6 @@ const Message = (props) => {
 }
 
 Message.propTypes = {
-    id: PropTypes.number.isRequired,
-    content: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
     upvotes: PropTypes.number,
     downvotes: PropTypes.number,
     onClickDownvote: PropTypes.func.isRequired,
