@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, PUT, GET, OPTIONS, DELETE");
 
 use App\Model\UserModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,13 +49,18 @@ class UserController extends AbstractController
             $statusCode = 400;
         }
 
-        $sanitizedPageResults = $this->sanitize($pagedResults);
+        $sanitizedPageResults = null;
+        if ($pagedResults != null) {
+            $sanitizedPageResults = $this->sanitize($pagedResults);
+        } else {
+            $statusCode = 400;
+        }
 
         return new JsonResponse($sanitizedPageResults, $statusCode);
     }
 
     /**
-     * @Route("/users/{id}", methods={"GET"}, name="removeUser")
+     * @Route("/users/remove/{id}", methods={"DELETE", "OPTIONS"}, name="removeUser")
      */
     public function removeUser($id)
     {
@@ -72,7 +78,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}", methods={"POST"}, name="editUserRole")
+     * @Route("/users/edit/{id}", methods={"PUT", "OPTIONS"}, name="editUserRole")
      */
     public function editUserRole($id)
     {
@@ -95,7 +101,12 @@ class UserController extends AbstractController
             $statusCode = 500;
         }
 
-        $sanitizedUser = $this->sanitize($user);
+        $sanitizedUser = null;
+        if ($user != null) {
+            $sanitizedUser = $this->sanitize($user);
+        } else {
+            $statusCode = 400;
+        }
 
         return new JsonResponse($sanitizedUser, $statusCode);
     }

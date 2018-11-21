@@ -25,9 +25,10 @@ class UserList extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         axios.get('http://localhost:8000/users')
             .then(response => {
+                this.gettingUsers = true;
                 const users = response.data;
                 this.setState({ users });
                 this.setState({
@@ -50,9 +51,15 @@ class UserList extends Component {
     handleRemoveUser = (e) => {
         e.preventDefault();
         if (this.state.selectedRemoveUserOption != null) {
-            axios.get('http://localhost:8000/users/' + this.state.selectedRemoveUserOption.value)
+            axios.delete('http://localhost:8000/users/remove/' + this.state.selectedRemoveUserOption.value)
                 .then(response => {
-                    this.componentWillMount();
+                    this.componentDidMount();
+                    this.setState({
+                        selectedRemoveUserOption: null
+                    });
+                })
+                .catch(error => {
+                    this.componentDidMount();
                     this.setState({
                         selectedRemoveUserOption: null
                     });
@@ -75,13 +82,20 @@ class UserList extends Component {
     handleEditUserRole = (e) => {
         e.preventDefault();
         if (this.state.selectedEditUserRoleOption != null && this.state.selectedRoleOption != null) {
-            axios.post('http://localhost:8000/users/' + this.state.selectedEditUserRoleOption.value + '?role=' + this.state.selectedRoleOption.value)
+            axios.put('http://localhost:8000/users/edit/' + this.state.selectedEditUserRoleOption.value + '?role=' + this.state.selectedRoleOption.value)
                 .then(response => {
-                    this.componentWillMount();
+                    this.componentDidMount();
                     this.setState({
                         selectedEditUserRoleOption: null,
                         selectedRoleOption: null
-                    })
+                    });
+                })
+                .catch(error => {
+                    this.componentDidMount();
+                    this.setState({
+                        selectedEditUserRoleOption: null,
+                        selectedRoleOption: null
+                    });
                 });
         }
     }
